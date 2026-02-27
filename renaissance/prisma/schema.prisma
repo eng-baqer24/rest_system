@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  time      String
+  guests    Int      @default(2)
+  name      String?
+  email     String?
+  phone     String?
+  notes     String?  @db.Text
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date, time])
+  @@index([status])
+}
+
+model DishCategory {
+  id        String   @id @default(cuid())
+  nameAr    String
+  nameEn    String?
+  sortOrder Int      @default(0)
+  items     Dish[]
+
+  @@map("dish_categories")
+}
+
+model Dish {
+  id          String       @id @default(cuid())
+  categoryId  String
+  category    DishCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  nameAr      String
+  nameEn      String?
+  description String?      @db.Text
+  price       Decimal?     @db.Decimal(10, 2)
+  imageUrl    String?
+  isFeatured  Boolean      @default(false)
+  sortOrder   Int          @default(0)
+
+  @@map("dishes")
+}

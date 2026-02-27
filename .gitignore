@@ -1,0 +1,15 @@
+# Environment and secrets - do not commit
+.env
+.env.local
+.env*.local
+
+# Dependencies and build
+node_modules/
+.next/
+out/
+build/
+
+# Misc
+.DS_Store
+*.pem
+.vercel
