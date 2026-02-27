@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { addDays, format, startOfDay } from "date-fns";
 
+/** Ensure this route is always resolved at request time (not during build). */
+export const dynamic = "force-dynamic";
+
 /** Max reservations per day — above this the date is considered fully booked */
 const MAX_RESERVATIONS_PER_DAY = 8;
 
