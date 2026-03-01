@@ -1,6 +1,6 @@
 # Rest System — مشروع موقع مطعم Renaissance
 
-**هل تظهر لديك صفحة 404 على Vercel؟** اضبط **مجلد الجذر (Root Directory)** على `renaissance` في إعدادات المشروع: **Settings → Build and Deployment → Root Directory** → Edit → اكتب `renaissance` → Save ثم **Redeploy**.
+**هل تظهر لديك صفحة 404 على Vercel؟** أو رسالة **"No Next.js version detected"**؟ اضبط **مجلد الجذر (Root Directory)** على `renaissance`: **Settings → Build and Deployment → Root Directory** → Edit → اكتب `renaissance` → Save ثم **Redeploy**.
 
 ---
 
@@ -9,7 +9,8 @@
 اتبع الخطوات بالترتيب:
 
 1. **تأكد من مجلد الجذر بالضبط**
-   - في **Root Directory** يجب أن يكون القيمة: `renaissance` فقط.
+   - في **Root Directory** يجب أن يكون القيمة: `renaissance` فقط (حيث يوجد `package.json` الذي فيه `next`).
+   - إذا تركت الجذر فارغاً أو `.` فستظهر رسالة "No Next.js version detected" لأن Vercel يقرأ الـ `package.json` في الجذر. الحل: ضع `renaissance`.
    - بدون شرطة في البداية أو النهاية، بدون مسافات، وبحروف صغيرة (r صغيرة).
 
 2. **احفظ ثم أعد النشر**
