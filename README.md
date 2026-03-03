@@ -1,6 +1,6 @@
 # Rest System — مشروع موقع مطعم Renaissance
 
-**هل تظهر لديك صفحة 404 على Vercel؟** أو رسالة **"No Next.js version detected"**؟ اضبط **مجلد الجذر (Root Directory)** على `renaissance`: **Settings → Build and Deployment → Root Directory** → Edit → اكتب `renaissance` → Save ثم **Redeploy**.
+**هل تظهر لديك صفحة 404 على Vercel؟** أو **"No Next.js version detected"** أو **"The specified Root Directory does not exist"**؟ اضبط **مجلد الجذر (Root Directory)** على `renaissance` (بدون مسافة قبل أو بعد): **Settings → Build and Deployment → Root Directory** → Edit → اكتب `renaissance` → Save ثم **Redeploy**.
 
 ---
 
@@ -9,9 +9,9 @@
 اتبع الخطوات بالترتيب:
 
 1. **تأكد من مجلد الجذر بالضبط**
-   - في **Root Directory** يجب أن يكون القيمة: `renaissance` فقط (حيث يوجد `package.json` الذي فيه `next`).
-   - إذا تركت الجذر فارغاً أو `.` فستظهر رسالة "No Next.js version detected" لأن Vercel يقرأ الـ `package.json` في الجذر. الحل: ضع `renaissance`.
-   - بدون شرطة في البداية أو النهاية، بدون مسافات، وبحروف صغيرة (r صغيرة).
+   - القيمة الصحيحة فقط: `renaissance` (حرفاً بحرف، **بدون مسافة في البداية أو النهاية**).
+   - إذا ظهرت رسالة **"The specified Root Directory ... does not exist"** فغالباً يوجد مسافة زائدة: مثلاً `renaissance ` أو ` renaissance`. احذفها واترك `renaissance` فقط.
+   - بدون شرطة `/` في البداية أو النهاية، بدون مسافات، وبحروف صغيرة (r صغيرة).
 
 2. **احفظ ثم أعد النشر**
    - بعد تغيير **Root Directory** اضغط **Save**.
@@ -28,6 +28,7 @@
 
 5. **إن لم ينجح شيء**
    - احذف المشروع من Vercel ثم أعد ربط المستودع من جديد، وعند إنشاء المشروع اختر **Root Directory** = `renaissance` من البداية.
+   - إذا ظهر **"Command cd renaissance && npm install exited with 1"**: الحل الأفضل هو ضبط **Root Directory** على `renaissance` (بدون مسافة) حتى لا يُستخدم أمر التثبيت من الجذر أصلاً. أو أعد النشر بعد التحديثات الأخيرة على أوامر البناء.
 
 ---
 

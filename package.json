@@ -3,8 +3,8 @@
   "private": true,
   "description": "جذر المستودع — التطبيق الفعلي في مجلد renaissance",
   "scripts": {
-    "install": "cd renaissance && npm install",
-    "build": "cd renaissance && npm run build"
+    "install": "npm install --prefix renaissance",
+    "build": "npm run build --prefix renaissance"
   },
   "dependencies": {
     "next": "16.1.6",
