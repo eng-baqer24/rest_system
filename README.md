@@ -1,5 +1,25 @@
 # Rest System — مشروع موقع مطعم Renaissance
 
+**خطأ "Command cd renaissance && npm install exited with 1"؟**
+
+يظهر هذا الخطأ عندما يكون في Vercel **أمر تثبيت مخصص** قديم. يجب تطبيق **نقطتين** معاً:
+
+1. **ضبط مجلد الجذر (Root Directory)**
+   - **Settings** → **General** → **Root Directory** → **Edit**
+   - اكتب: `renaissance` (بدون مسافات، بحروف صغيرة)
+   - **Save**
+
+2. **إلغاء أوامر التثبيت والبناء المخصصة**
+   - **Settings** → **Build and Deployment** (أو **General**)
+   - في **Build and Development Settings** تأكد أن **Override** غير مفعّل لأمر التثبيت والبناء، أو:
+   - **Install Command**: اتركه **فارغاً** (احذف أي نص مثل `cd renaissance && npm install`)
+   - **Build Command**: اتركه **فارغاً**
+   - احفظ ثم **Redeploy**
+
+بعد ذلك يبني Vercel من مجلد `renaissance` ويشغّل `npm install` و `npm run build` تلقائياً داخل ذلك المجلد.
+
+---
+
 **هل تظهر لديك صفحة 404 على Vercel؟** أو **"No Next.js version detected"** أو **"The specified Root Directory does not exist"**؟ اضبط **مجلد الجذر (Root Directory)** على `renaissance` (بدون مسافة قبل أو بعد): **Settings → Build and Deployment → Root Directory** → Edit → اكتب `renaissance` → Save ثم **Redeploy**.
 
 ---
@@ -27,8 +47,7 @@
    - تأكد أنك تفتح رابط **نشر تم بناؤه بعد** تغيير مجلد الجذر (مثلاً رابط Production أو أحدث Preview)، وليس رابط نشر قديم.
 
 5. **إن لم ينجح شيء**
-   - احذف المشروع من Vercel ثم أعد ربط المستودع من جديد، وعند إنشاء المشروع اختر **Root Directory** = `renaissance` من البداية.
-   - إذا ظهر **"Command cd renaissance && npm install exited with 1"**: الحل الأفضل هو ضبط **Root Directory** على `renaissance` (بدون مسافة) حتى لا يُستخدم أمر التثبيت من الجذر أصلاً. أو أعد النشر بعد التحديثات الأخيرة على أوامر البناء.
+   - احذف المشروع من Vercel ثم أعد ربط المستودع من جديد، وعند إنشاء المشروع اختر **Root Directory** = `renaissance` من البداية، ولا تضف أي **Install Command** أو **Build Command** مخصص.
 
 ---
 
