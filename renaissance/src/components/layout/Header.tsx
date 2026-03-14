@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/booking/BookingModal";
+import { NavSidebar } from "@/components/layout/NavSidebar";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -33,13 +34,16 @@ export function Header() {
       className="absolute top-0 left-0 right-0 z-50 w-full pt-4 pb-12 transition-colors duration-300"
     >
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-10">
-        <Link
-          href="/"
-          className="font-serif text-xl font-semibold tracking-wide text-primary md:text-2xl transition-colors hover:opacity-90"
-        >
-          Renaissance
-        </Link>
-        <nav className="hidden items-center gap-10 md:flex">
+        <div className="flex items-center gap-3">
+          <NavSidebar />
+          <Link
+            href="/"
+            className="font-serif text-xl font-semibold tracking-wide text-primary md:text-2xl transition-colors hover:opacity-90"
+          >
+            Renaissance
+          </Link>
+        </div>
+        <nav className="hidden items-center gap-10 lg:flex">
           {nav.map((item, i) => (
             <motion.div
               key={item.href}

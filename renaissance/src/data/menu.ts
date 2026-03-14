@@ -1,4 +1,4 @@
-// صور طعام فاخرة من Pexels - كل صورة مطابقة للطبق
+// أصناف القائمة — صور متناسقة مع اسم كل منتج
 const MENU_CATEGORIES = [
   {
     id: "starters",
@@ -14,7 +14,7 @@ const MENU_CATEGORIES = [
         name: "Cream of Mushroom Soup",
         description: "Fresh mushrooms, cream, herbs.",
         price: "22",
-        image: "https://images.pexels.com/photos/5419030/pexels-photo-5419030.jpeg?auto=compress&cs=tinysrgb&w=400",
+        image: "https://images.pexels.com/photos/5394511/pexels-photo-5394511.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
       {
         name: "Bruschetta with Tomato & Basil",
@@ -26,7 +26,7 @@ const MENU_CATEGORIES = [
   },
   {
     id: "mains",
-    name: "Main Courses",
+    name: "الطباق الرئيسية — Main Courses",
     items: [
       {
         name: "Filet Mignon Steak",
@@ -38,7 +38,7 @@ const MENU_CATEGORIES = [
         name: "Grilled Salmon with Vegetables",
         description: "Grilled salmon, asparagus, baby potatoes, lemon sauce.",
         price: "78",
-        image: "https://images.pexels.com/photos/555775/pexels-photo-555775.jpeg?auto=compress&cs=tinysrgb&w=400",
+        image: "https://images.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
       {
         name: "Mushroom & Parmesan Risotto",
@@ -46,11 +46,23 @@ const MENU_CATEGORIES = [
         price: "55",
         image: "https://images.pexels.com/photos/4103375/pexels-photo-4103375.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
+      {
+        name: "Lamb Chops with Mint Jus",
+        description: "Grilled lamb chops, mint jus, roasted vegetables.",
+        price: "72",
+        image: "https://images.pexels.com/photos/3535383/pexels-photo-3535383.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
+      {
+        name: "Chicken Shawarma Plate",
+        description: "Marinated chicken, garlic sauce, pickles, rice.",
+        price: "38",
+        image: "https://images.pexels.com/photos/2673353/pexels-photo-2673353.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
     ],
   },
   {
     id: "desserts",
-    name: "Desserts",
+    name: "الحلويات — Desserts",
     items: [
       {
         name: "Chocolate Fondant",
@@ -70,6 +82,54 @@ const MENU_CATEGORIES = [
         price: "28",
         image: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
+      {
+        name: "Baklava",
+        description: "Layered pastry with nuts and honey syrup.",
+        price: "26",
+        image: "https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
+      {
+        name: "Kunafa",
+        description: "Crispy pastry with sweet cheese and syrup.",
+        price: "30",
+        image: "https://images.pexels.com/photos/31500975/pexels-photo-31500975.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
+    ],
+  },
+  {
+    id: "hookahs",
+    name: "الأراكيل — Hookahs",
+    items: [
+      {
+        name: "Classic Double Apple",
+        description: "Double apple flavour, traditional mix.",
+        price: "45",
+        image: "https://images.unsplash.com/photo-1685003227041-49af807c0113?w=400&q=80",
+      },
+      {
+        name: "Mint & Lemon",
+        description: "Refreshing mint with a touch of lemon.",
+        price: "45",
+        image: "https://images.unsplash.com/photo-1685003227041-49af807c0113?w=400&q=80",
+      },
+      {
+        name: "Grape & Mint",
+        description: "Sweet grape with fresh mint.",
+        price: "48",
+        image: "https://images.unsplash.com/photo-1685003227041-49af807c0113?w=400&q=80",
+      },
+      {
+        name: "Blueberry",
+        description: "Smooth blueberry flavour.",
+        price: "48",
+        image: "https://images.unsplash.com/photo-1685003227041-49af807c0113?w=400&q=80",
+      },
+      {
+        name: "Premium Mix (Custom)",
+        description: "Your choice of flavours combined.",
+        price: "55",
+        image: "https://images.unsplash.com/photo-1685003227041-49af807c0113?w=400&q=80",
+      },
     ],
   },
   {
@@ -86,13 +146,25 @@ const MENU_CATEGORIES = [
         name: "Espresso / Cappuccino",
         description: "Premium coffee from selected beans.",
         price: "12",
-        image: "https://images.pexels.com/photos/2159156/pexels-photo-2159156.jpeg?auto=compress&cs=tinysrgb&w=400",
+        image: "https://images.pexels.com/photos/3124181/pexels-photo-3124181.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
       {
         name: "Soft Drinks & Water",
         description: "Selection of cold beverages.",
         price: "8",
         image: "https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
+      {
+        name: "Arabic Coffee",
+        description: "Cardamom-infused traditional coffee.",
+        price: "14",
+        image: "https://images.pexels.com/photos/3124181/pexels-photo-3124181.jpeg?auto=compress&cs=tinysrgb&w=400",
+      },
+      {
+        name: "Fresh Lemonade with Mint",
+        description: "House-made lemonade with fresh mint.",
+        price: "16",
+        image: "https://images.pexels.com/photos/1028599/pexels-photo-1028599.jpeg?auto=compress&cs=tinysrgb&w=400",
       },
     ],
   },

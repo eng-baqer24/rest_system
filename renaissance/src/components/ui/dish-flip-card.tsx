@@ -5,6 +5,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80";
+
 interface DishFlipCardProps {
     name: string;
     description: string;
@@ -23,6 +25,11 @@ export function DishFlipCard({
     className,
 }: DishFlipCardProps) {
     const [isFlipped, setIsFlipped] = useState(false);
+    const [imgSrc, setImgSrc] = useState(image);
+
+    const handleImageError = () => {
+        setImgSrc(FALLBACK_IMAGE);
+    };
 
     return (
         <motion.div
@@ -43,11 +50,12 @@ export function DishFlipCard({
                 <div className="absolute inset-0 backface-hidden rounded-lg overflow-hidden border border-border bg-card shadow-lg">
                     <div className="relative h-2/3 w-full">
                         <Image
-                            src={image}
+                            src={imgSrc}
                             alt={name}
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            onError={handleImageError}
                         />
                         {/* Dark gradient overlay on image */}
                         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />

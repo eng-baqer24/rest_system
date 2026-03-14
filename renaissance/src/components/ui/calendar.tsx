@@ -41,7 +41,11 @@ function Calendar({
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString("default", { month: "short" }),
+          date.toLocaleString("en-US", { month: "short" }),
+        formatCaption: (date, options) =>
+          date.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+        formatWeekdayName: (date) =>
+          date.toLocaleDateString("en-US", { weekday: "short" }),
         ...formatters,
       }}
       classNames={{
@@ -192,12 +196,13 @@ function CalendarDayButton({
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
 
+  const dateKey = `${day.date.getFullYear()}-${String(day.date.getMonth() + 1).padStart(2, "0")}-${String(day.date.getDate()).padStart(2, "0")}`;
   return (
     <Button
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString()}
+      data-day={dateKey}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&

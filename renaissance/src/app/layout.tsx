@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <Header />
-        <main className="min-h-screen pt-28 pb-24 md:pb-28">{children}</main>
+        <main className="min-h-screen pt-28 pb-24 md:pb-28 md:pl-20">{children}</main>
         <Footer />
         <StickyBookButton />
       </body>
