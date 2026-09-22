@@ -1,13 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-/** Ensure this route is always resolved at request time (not during build). */
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { date, time, guests, name, email, phone, notes } = body;
+    const { date, time, guests, name, email, phone, notes, tableId, tableName } = body;
 
     if (!date || !time || guests == null) {
       return NextResponse.json(
@@ -21,10 +20,12 @@ export async function POST(request: NextRequest) {
         date: new Date(date),
         time: String(time),
         guests: Number(guests) || 2,
-        name: name || null,
-        email: email || null,
-        phone: phone || null,
-        notes: notes || null,
+        name: name?.trim() || null,
+        email: email?.trim() || null,
+        phone: phone?.trim() || null,
+        notes: notes?.trim() || null,
+        tableId: tableId ? String(tableId) : null,
+        tableName: tableName ? String(tableName) : null,
         status: "pending",
       },
     });

@@ -17,11 +17,14 @@ model Reservation {
   email     String?
   phone     String?
   notes     String?  @db.Text
+  tableId   String?
+  tableName String?
   status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([date, time])
+  @@index([date, time, tableId])
   @@index([status])
 }
 

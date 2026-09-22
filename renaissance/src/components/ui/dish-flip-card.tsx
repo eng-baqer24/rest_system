@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,10 @@ export function DishFlipCard({
 }: DishFlipCardProps) {
     const [isFlipped, setIsFlipped] = useState(false);
     const [imgSrc, setImgSrc] = useState(image);
+
+    useEffect(() => {
+        setImgSrc(image);
+    }, [image]);
 
     const handleImageError = () => {
         setImgSrc(FALLBACK_IMAGE);

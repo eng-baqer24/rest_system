@@ -42,7 +42,7 @@ function Calendar({
       formatters={{
         formatMonthDropdown: (date) =>
           date.toLocaleString("en-US", { month: "short" }),
-        formatCaption: (date, options) =>
+        formatCaption: (date) =>
           date.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
         formatWeekdayName: (date) =>
           date.toLocaleDateString("en-US", { weekday: "short" }),
