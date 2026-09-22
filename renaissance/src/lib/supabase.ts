@@ -1,7 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabasePublishableKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabasePublishableKey);
+/**
+ * @deprecated Use `createClient` from `@/lib/supabase/client` instead.
+ */
+export { createClient as createBrowserClient } from "@/lib/supabase/client";

@@ -17,13 +17,21 @@ export async function GET() {
     const today = startOfDay(new Date());
     const endDate = addDays(today, 60);
 
-    const reservations = await prisma.reservation.findMany({
+    // Fast timeout so the app doesn't hang if database is offline
+    const reservationsPromise = prisma.reservation.findMany({
       where: {
         date: { gte: today, lte: endDate },
         status: { not: "cancelled" },
       },
       select: { date: true },
     });
+
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("DB Timeout")), 800)
+    );
+
+    const reservations = await Promise.race([reservationsPromise, timeoutPromise]);
+
 
     const countByDate = new Map<string, number>();
     for (const r of reservations) {

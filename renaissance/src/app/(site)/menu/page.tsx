@@ -1,14 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DishFlipCard } from "@/components/ui/dish-flip-card";
 import MENU_CATEGORIES from "@/data/menu";
 import { cn } from "@/lib/utils";
 
+type MenuItem = {
+  name: string;
+  description: string;
+  image: string;
+  price?: string;
+};
+
+type MenuCategory = {
+  id: string;
+  name: string;
+  items: MenuItem[];
+};
+
 export default function MenuPage() {
+  const [categories, setCategories] = useState<MenuCategory[]>(MENU_CATEGORIES);
   const [selectedId, setSelectedId] = useState<string>(MENU_CATEGORIES[0].id);
-  const category = MENU_CATEGORIES.find((c) => c.id === selectedId)!;
+
+  useEffect(() => {
+    fetch("/api/menu")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.categories?.length) {
+          setCategories(data.categories);
+          setSelectedId((current) =>
+            data.categories.some((c: MenuCategory) => c.id === current)
+              ? current
+              : data.categories[0].id
+          );
+        }
+      })
+      .catch(() => {
+        /* keep static fallback */
+      });
+  }, []);
+
+  const category =
+    categories.find((c) => c.id === selectedId) ?? categories[0];
+
+  if (!category) return null;
 
   return (
     <div className="container px-4 py-8 md:px-6">
@@ -21,9 +57,8 @@ export default function MenuPage() {
         </p>
       </header>
 
-      {/* اختيارات الأصناف */}
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {MENU_CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <button
             key={cat.id}
             type="button"
@@ -40,7 +75,6 @@ export default function MenuPage() {
         ))}
       </div>
 
-      {/* منتجات الصنف المختار */}
       <AnimatePresence mode="wait">
         <motion.section
           key={selectedId}

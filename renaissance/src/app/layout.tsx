@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { StickyBookButton } from "@/components/StickyBookButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Renaissance | An Unforgettable Fine Dining Experience",
-  description: "Fine dining restaurant — Welcome to a world of elegance and refinement. Reserve your table now.",
+  description:
+    "Fine dining restaurant — Welcome to a world of elegance and refinement. Reserve your table now.",
 };
 
 export default function RootLayout({
@@ -26,15 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <head />
+    <html lang="ar" dir="rtl" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
-        <Header />
-        <main className="min-h-screen pt-28 pb-24 md:pb-28 md:pl-20">{children}</main>
-        <Footer />
-        <StickyBookButton />
+        {children}
       </body>
     </html>
   );
