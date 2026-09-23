@@ -12,6 +12,7 @@ const nav = [
   { href: "/menu", label: "Menu" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/dashboard", label: "Dashboard / لوحة التحكم", isAdmin: true },
 ];
 
 export function NavSidebar() {
@@ -89,13 +90,19 @@ export function NavSidebar() {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                      "px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-between",
                       pathname === item.href
                         ? "bg-primary/20 text-primary"
-                        : "text-foreground/90 hover:bg-muted hover:text-foreground"
+                        : "text-foreground/90 hover:bg-muted hover:text-foreground",
+                      item.isAdmin && "border border-primary/30 mt-2 bg-primary/10"
                     )}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    {item.isAdmin && (
+                      <span className="text-[10px] bg-primary text-black font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Admin
+                      </span>
+                    )}
                   </Link>
                 ))}
               </nav>

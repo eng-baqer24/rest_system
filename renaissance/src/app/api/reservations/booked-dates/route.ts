@@ -2,28 +2,31 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { addDays, format, startOfDay } from "date-fns";
 
+/** Ensure this route is always resolved at request time (not during build). */
 export const dynamic = "force-dynamic";
 
+/** Max reservations per day — above this the date is considered fully booked */
 const MAX_RESERVATIONS_PER_DAY = 8;
 
+/**
+ * Returns dates that are fully booked (no availability).
+ * Used to disable those days in the booking calendar.
+ */
 export async function GET() {
   try {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("No database configured");
+    }
     const today = startOfDay(new Date());
     const endDate = addDays(today, 60);
 
-    const reservationsPromise = prisma.reservation.findMany({
+    const reservations = await prisma.reservation.findMany({
       where: {
         date: { gte: today, lte: endDate },
         status: { not: "cancelled" },
       },
       select: { date: true },
     });
-
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("DB Timeout")), 3500)
-    );
-
-    const reservations = await Promise.race([reservationsPromise, timeoutPromise]);
 
     const countByDate = new Map<string, number>();
     for (const r of reservations) {
@@ -38,15 +41,9 @@ export async function GET() {
       }
     });
 
-    return NextResponse.json(
-      { bookedDates },
-      {
-        headers: {
-          "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120",
-        },
-      }
-    );
+    return NextResponse.json({ bookedDates });
   } catch {
+    // Fallback: return some demo booked dates so the UI still shows the feature
     const today = startOfDay(new Date());
     const demoBookedDates: string[] = [];
     for (let i = 1; i <= 30; i++) {

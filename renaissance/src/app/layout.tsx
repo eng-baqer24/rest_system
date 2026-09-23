@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyBookButton } from "@/components/StickyBookButton";
+import { AnnouncementBanner } from "@/components/layout/AnnouncementBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Renaissance | An Unforgettable Fine Dining Experience",
-  description: "Fine dining restaurant — Welcome to a world of elegance and refinement. Reserve your table now.",
+  title: "Renaissance - Fine Dining Restaurant",
+  description:
+    "An exquisite fine dining restaurant experience featuring table reservations, gourmet menus, and luxury culinary presentation.",
+  openGraph: {
+    title: "Renaissance - Fine Dining Restaurant",
+    description:
+      "An exquisite fine dining restaurant experience featuring table reservations, gourmet menus, and luxury culinary presentation.",
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
+        <AnnouncementBanner />
         <Header />
         <main className="min-h-screen pt-28 pb-24 md:pb-28 md:pl-20">{children}</main>
         <Footer />

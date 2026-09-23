@@ -1,0 +1,8 @@
+{
+  "name": "Renaissance - Fine Dining Restaurant",
+  "description": "An exquisite fine dining restaurant experience featuring table reservations, gourmet menus, and luxury culinary presentation.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

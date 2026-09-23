@@ -82,7 +82,7 @@ export default function ContactPage() {
           <div className="aspect-[4/3] min-h-[280px] overflow-hidden rounded-lg bg-muted">
             <iframe
               title="Location map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31942541.88329688!2d38.996815!3d33.315241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1559e8d2c2e7c8c1%3A0x1234567890abcdef!2sBaghdad%2C%20Iraq!5e0!3m2!1sen!2s!4v1234567890"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=44.3000%2C33.2500%2C44.4500%2C33.3700&layer=mapnik&marker=33.3152%2C44.3661"
               width="100%"
               height="100%"
               style={{ border: 0 }}

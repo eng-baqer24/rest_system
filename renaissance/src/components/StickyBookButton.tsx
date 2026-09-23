@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 export function StickyBookButton() {
+  const pathname = usePathname();
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 180], [72, 0]);
   const opacity = useTransform(scrollY, [0, 180], [0, 1]);
+
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
 
   return (
     <motion.div

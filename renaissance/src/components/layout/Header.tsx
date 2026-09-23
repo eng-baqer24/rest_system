@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/booking/BookingModal";
 import { NavSidebar } from "@/components/layout/NavSidebar";
 import { cn } from "@/lib/utils";
+import { LayoutDashboard, Store } from "lucide-react";
 
 const nav = [
   { href: "/", label: "Home" },
   { href: "/menu", label: "Menu" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export function Header() {
@@ -71,20 +73,49 @@ export function Header() {
             </motion.div>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <BookingModal>
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
+        <div className="flex items-center gap-2.5">
+          {pathname?.startsWith("/dashboard") ? (
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="border-primary/40 text-primary hover:bg-primary/10 gap-1.5"
             >
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow"
+              <Link href="/">
+                <Store className="size-4" />
+                <span className="hidden sm:inline">عرض الموقع</span>
+                <span className="sm:hidden">الموقع</span>
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="border-border/60 text-muted-foreground hover:text-primary hover:border-primary/40 gap-1.5"
+            >
+              <Link href="/dashboard">
+                <LayoutDashboard className="size-4 text-primary" />
+                <span className="hidden md:inline">لوحة التحكم</span>
+              </Link>
+            </Button>
+          )}
+
+          {!pathname?.startsWith("/dashboard") && (
+            <BookingModal>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Reserve
-              </Button>
-            </motion.div>
-          </BookingModal>
+                <Button
+                  size="default"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow px-4"
+                >
+                  Reserve
+                </Button>
+              </motion.div>
+            </BookingModal>
+          )}
         </div>
       </div>
     </motion.header>

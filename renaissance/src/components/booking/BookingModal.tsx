@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { addDays, format, isBefore, startOfDay } from "date-fns";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -42,7 +42,11 @@ interface BookingModalProps {
 
 export function BookingModal({ children }: BookingModalProps) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>(1);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -54,8 +58,6 @@ export function BookingModal({ children }: BookingModalProps) {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => setMounted(true), []);
 
   const minDate = startOfDay(new Date());
   const maxDate = addDays(new Date(), 60);

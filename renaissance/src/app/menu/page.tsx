@@ -1,67 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DishFlipCard } from "@/components/ui/dish-flip-card";
 import MENU_CATEGORIES from "@/data/menu";
 import { cn } from "@/lib/utils";
 
-type MenuItem = {
-  name: string;
-  description: string;
-  image: string;
-  price?: string;
-  ingredients?: string[];
-};
-
-type MenuCategory = {
-  id: string;
-  name: string;
-  items: MenuItem[];
-};
-
 export default function MenuPage() {
-  const [categories, setCategories] = useState<MenuCategory[]>(MENU_CATEGORIES);
   const [selectedId, setSelectedId] = useState<string>(MENU_CATEGORIES[0].id);
-
-  // Background sync with database for fresh dishes
-  useEffect(() => {
-    fetch("/api/menu")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.categories?.length) {
-          setCategories(data.categories);
-          setSelectedId((current) =>
-            data.categories.some((c: MenuCategory) => c.id === current)
-              ? current
-              : data.categories[0].id
-          );
-        }
-      })
-      .catch(() => {
-        // Keep static fallback
-      });
-  }, []);
-
-  const category =
-    categories.find((c) => c.id === selectedId) ?? categories[0];
-
-  if (!category) return null;
+  const category = MENU_CATEGORIES.find((c) => c.id === selectedId)!;
 
   return (
     <div className="container px-4 py-8 md:px-6">
       <header className="mb-8 text-center">
         <h1 className="font-serif text-3xl font-semibold text-primary md:text-4xl">
-          قائمة المأكولات والمشروبات
+          Menu
         </h1>
         <p className="mt-2 text-muted-foreground">
-          اختر الصنف ثم تصفح أشهى الأطباق المحضرة بعناية
+          اختر الصنف ثم تصفح المنتجات
         </p>
       </header>
 
       {/* اختيارات الأصناف */}
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {categories.map((cat) => (
+        {MENU_CATEGORIES.map((cat) => (
           <button
             key={cat.id}
             type="button"
@@ -99,8 +61,7 @@ export default function MenuPage() {
                 name={item.name}
                 description={item.description}
                 image={item.image}
-                price={item.price ? `${item.price} ر.س` : undefined}
-                ingredients={item.ingredients}
+                price={item.price ? `$${item.price}` : undefined}
               />
             ))}
           </div>
@@ -109,10 +70,10 @@ export default function MenuPage() {
 
       <section className="mt-16 rounded-lg border border-primary/30 bg-card/50 p-8 text-center">
         <h3 className="font-serif text-xl font-semibold text-primary">
-          قائمة التذوق الخاصة (Tasting Menu)
+          Tasting Menu
         </h3>
-        <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
-          تجربة طعام متعددة الأطباق منتقاة خصيصاً بتوقيع الشيف التنفيذي. للحجز والاستفسار يرجى حجز طاولتك مسبقاً.
+        <p className="mt-2 text-muted-foreground">
+          A multi-course tasting experience curated by the chef. For enquiries and reservations, please contact us.
         </p>
       </section>
     </div>

@@ -14,7 +14,7 @@ const MENU_CATEGORIES = [
         name: "Cream of Mushroom Soup",
         description: "Fresh mushrooms, cream, herbs.",
         price: "22",
-        image: "https://images.pexels.com/photos/5394511/pexels-photo-5394511.jpeg?auto=compress&cs=tinysrgb&w=400",
+        image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80",
       },
       {
         name: "Bruschetta with Tomato & Basil",
@@ -170,4 +170,5 @@ const MENU_CATEGORIES = [
   },
 ];
 
+export { MENU_CATEGORIES };
 export default MENU_CATEGORIES;
