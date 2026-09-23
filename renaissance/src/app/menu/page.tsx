@@ -1,14 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DishFlipCard } from "@/components/ui/dish-flip-card";
 import MENU_CATEGORIES from "@/data/menu";
 import { cn } from "@/lib/utils";
 
+interface MenuItem {
+  id?: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+  badge?: string;
+  isAvailable?: boolean;
+}
+
+interface MenuCategory {
+  id: string;
+  name: string;
+  items: MenuItem[];
+}
+
 export default function MenuPage() {
+  const [categories, setCategories] = useState<MenuCategory[]>(MENU_CATEGORIES);
   const [selectedId, setSelectedId] = useState<string>(MENU_CATEGORIES[0].id);
-  const category = MENU_CATEGORIES.find((c) => c.id === selectedId)!;
+
+  useEffect(() => {
+    // Load dynamic menu items from API
+    async function loadMenu() {
+      try {
+        const res = await fetch("/api/menu");
+        const data = await res.json();
+        if (data.categories && Array.isArray(data.categories) && data.categories.length > 0) {
+          setCategories(data.categories);
+        }
+      } catch (err) {
+        console.error("Failed to fetch dynamic menu:", err);
+      }
+    }
+    loadMenu();
+  }, []);
+
+  const category = categories.find((c) => c.id === selectedId) || categories[0];
 
   return (
     <div className="container px-4 py-8 md:px-6">
@@ -23,7 +57,7 @@ export default function MenuPage() {
 
       {/* اختيارات الأصناف */}
       <div className="flex flex-wrap justify-center gap-2 mb-10">
-        {MENU_CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <button
             key={cat.id}
             type="button"
@@ -42,30 +76,43 @@ export default function MenuPage() {
 
       {/* منتجات الصنف المختار */}
       <AnimatePresence mode="wait">
-        <motion.section
-          key={selectedId}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.25 }}
-          className="space-y-8"
-        >
-          <h2 className="font-serif text-xl font-semibold text-primary border-b border-border/40 pb-2 flex items-center gap-3">
-            <span className="h-px bg-primary/60 w-8" />
-            {category.name}
-          </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {category.items.map((item) => (
-              <DishFlipCard
-                key={item.name}
-                name={item.name}
-                description={item.description}
-                image={item.image}
-                price={item.price ? `$${item.price}` : undefined}
-              />
-            ))}
-          </div>
-        </motion.section>
+        {category && (
+          <motion.section
+            key={selectedId}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-8"
+          >
+            <h2 className="font-serif text-xl font-semibold text-primary border-b border-border/40 pb-2 flex items-center gap-3">
+              <span className="h-px bg-primary/60 w-8" />
+              {category.name}
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {category.items.map((item) => (
+                <div key={item.id || item.name} className="relative group">
+                  <DishFlipCard
+                    name={item.name}
+                    description={item.description}
+                    image={item.image}
+                    price={item.price ? `$${item.price}` : undefined}
+                  />
+                  {item.isAvailable === false && (
+                    <div className="absolute top-3 left-3 z-10 bg-rose-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md backdrop-blur-sm">
+                      نفذ مؤقتاً
+                    </div>
+                  )}
+                  {item.badge && item.isAvailable !== false && (
+                    <div className="absolute top-3 left-3 z-10 bg-amber-500 text-black text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md">
+                      {item.badge}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        )}
       </AnimatePresence>
 
       <section className="mt-16 rounded-lg border border-primary/30 bg-card/50 p-8 text-center">

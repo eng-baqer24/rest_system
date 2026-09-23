@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -12,12 +12,16 @@ const nav = [
   { href: "/menu", label: "Menu" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/dashboard", label: "Dashboard / لوحة التحكم", isAdmin: true },
 ];
 
 export function NavSidebar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  // If on login or dashboard page, do not show public sidebar
+  if (pathname?.startsWith("/login") || pathname?.startsWith("/dashboard")) {
+    return null;
+  }
 
   return (
     <>
@@ -58,17 +62,16 @@ export function NavSidebar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 bg-black/60 md:bg-black/40"
               onClick={() => setOpen(false)}
-              aria-hidden
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              aria-hidden="true"
             />
             <motion.aside
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
-              className="fixed top-0 left-0 bottom-0 z-50 w-72 max-w-[85vw] bg-card border-r border-border shadow-xl flex flex-col"
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-card border-r border-border z-50 shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between p-4 border-b border-border">
                 <span className="font-serif text-lg font-semibold text-primary">
@@ -83,7 +86,7 @@ export function NavSidebar() {
                   <X className="size-5" />
                 </button>
               </div>
-              <nav className="flex flex-col p-4 gap-1">
+              <nav className="flex flex-col p-4 gap-1 flex-1">
                 {nav.map((item) => (
                   <Link
                     key={item.href}
@@ -93,19 +96,25 @@ export function NavSidebar() {
                       "px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-between",
                       pathname === item.href
                         ? "bg-primary/20 text-primary"
-                        : "text-foreground/90 hover:bg-muted hover:text-foreground",
-                      item.isAdmin && "border border-primary/30 mt-2 bg-primary/10"
+                        : "text-foreground/90 hover:bg-muted hover:text-foreground"
                     )}
                   >
                     <span>{item.label}</span>
-                    {item.isAdmin && (
-                      <span className="text-[10px] bg-primary text-black font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                        Admin
-                      </span>
-                    )}
                   </Link>
                 ))}
               </nav>
+
+              {/* Discrete Admin Login Link at the bottom */}
+              <div className="p-4 border-t border-border/60">
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-primary transition-colors py-2 px-3 rounded-lg hover:bg-muted/40"
+                >
+                  <Lock className="size-3.5 text-primary/70" />
+                  <span>بوابة إدارة المطعم</span>
+                </Link>
+              </div>
             </motion.aside>
           </>
         )}

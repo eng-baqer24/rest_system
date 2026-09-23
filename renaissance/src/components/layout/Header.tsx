@@ -7,19 +7,23 @@ import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/booking/BookingModal";
 import { NavSidebar } from "@/components/layout/NavSidebar";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Store } from "lucide-react";
 
 const nav = [
   { href: "/", label: "Home" },
   { href: "/menu", label: "Menu" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
+
+  // If on login or dashboard page, do not show public customer header
+  if (pathname?.startsWith("/login") || pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   const headerBg = useTransform(
     scrollY,
     [0, 120],
@@ -61,61 +65,31 @@ export function Header() {
                 )}
               >
                 {item.label}
-                <span
-                  className={cn(
-                    "absolute -bottom-1 left-0 right-0 h-[1px] bg-primary transition-transform duration-300 origin-left",
-                    pathname === item.href
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
-                  )}
-                />
+                {pathname === item.href && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </Link>
             </motion.div>
           ))}
         </nav>
-        <div className="flex items-center gap-2.5">
-          {pathname?.startsWith("/dashboard") ? (
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="border-primary/40 text-primary hover:bg-primary/10 gap-1.5"
+        <div className="flex items-center gap-3">
+          <BookingModal>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Link href="/">
-                <Store className="size-4" />
-                <span className="hidden sm:inline">عرض الموقع</span>
-                <span className="sm:hidden">الموقع</span>
-              </Link>
-            </Button>
-          ) : (
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="border-border/60 text-muted-foreground hover:text-primary hover:border-primary/40 gap-1.5"
-            >
-              <Link href="/dashboard">
-                <LayoutDashboard className="size-4 text-primary" />
-                <span className="hidden md:inline">لوحة التحكم</span>
-              </Link>
-            </Button>
-          )}
-
-          {!pathname?.startsWith("/dashboard") && (
-            <BookingModal>
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
+              <Button
+                size="default"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow px-5"
               >
-                <Button
-                  size="default"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow px-4"
-                >
-                  Reserve
-                </Button>
-              </motion.div>
-            </BookingModal>
-          )}
+                Book a Table
+              </Button>
+            </motion.div>
+          </BookingModal>
         </div>
       </div>
     </motion.header>

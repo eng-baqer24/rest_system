@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -30,11 +31,14 @@ import {
   Bell,
   Trash2,
   Edit3,
+  LogOut,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MENU_CATEGORIES } from "@/data/menu";
+import { MenuManager } from "@/components/dashboard/MenuManager";
 
 interface Reservation {
   id: string;
@@ -72,6 +76,10 @@ type StatusFilter = "all" | "pending" | "confirmed" | "completed" | "cancelled";
 type DateFilter = "all" | "today" | "upcoming";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [adminName, setAdminName] = useState<string>("مدير المطعم");
+
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -81,6 +89,31 @@ export default function DashboardPage() {
   const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+  // Authentication check
+  useEffect(() => {
+    const isAuth =
+      localStorage.getItem("admin_auth") === "true" ||
+      document.cookie.includes("admin_session=authenticated");
+
+    if (!isAuth) {
+      router.replace("/login");
+    } else {
+      setIsAuthenticated(true);
+      const storedName = localStorage.getItem("admin_name");
+      if (storedName) setAdminName(storedName);
+    }
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {}
+    localStorage.removeItem("admin_auth");
+    localStorage.removeItem("admin_name");
+    document.cookie = "admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    router.replace("/login");
+  };
 
   // Settings State
   const [settings, setSettings] = useState<RestaurantSettings | null>(null);
@@ -420,6 +453,17 @@ export default function DashboardPage() {
     return `https://wa.me/${cleanPhone}?text=${text}`;
   };
 
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#09090b] text-foreground">
+        <div className="text-center space-y-4">
+          <div className="size-10 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-sm text-muted-foreground font-medium">جاري التحقق من صلاحيات المدير...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#0B0B0B] text-foreground pb-20 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" dir="rtl">
       {/* Toast Notification */}
@@ -477,6 +521,21 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center flex-wrap gap-2.5">
+          {/* Admin Logged-in info & Logout button */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card border border-border/80 text-xs shadow-sm">
+            <ShieldCheck className="size-4 text-emerald-400" />
+            <span className="text-muted-foreground hidden sm:inline">مرحباً:</span>
+            <span className="font-semibold text-foreground">{adminName}</span>
+            <button
+              onClick={handleLogout}
+              className="mr-1.5 text-rose-400 hover:text-rose-300 flex items-center gap-1 border-r border-border pr-2 transition-colors"
+              title="تسجيل الخروج والعودة لصفحة الدخول"
+            >
+              <LogOut className="size-3.5" />
+              <span>خروج</span>
+            </button>
+          </div>
+
           <Button
             variant="outline"
             size="sm"
@@ -485,7 +544,7 @@ export default function DashboardPage() {
             className="border-border hover:bg-muted gap-2 text-xs h-9"
           >
             <RefreshCw className={`size-3.5 ${refreshing ? "animate-spin text-primary" : ""}`} />
-            <span>تحديث البيانات</span>
+            <span className="hidden sm:inline">تحديث البيانات</span>
           </Button>
 
           <Button
@@ -505,7 +564,7 @@ export default function DashboardPage() {
           >
             <Link href="/" target="_blank">
               <ArrowUpRight className="size-3.5 text-primary" />
-              <span>معاينة الموقع</span>
+              <span className="hidden sm:inline">الموقع الرئيسي</span>
             </Link>
           </Button>
         </div>
@@ -1240,55 +1299,9 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Tab 3: Menu Overview */}
+      {/* Tab 3: Interactive Menu Management */}
       {activeTab === "menu" && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold text-foreground">قائمة أطباق رينيسانس الفاخرة</h2>
-              <p className="text-xs text-muted-foreground">
-                استعراض فئات وأسعار الأطباق المعروضة للزبائن على الموقع
-              </p>
-            </div>
-            <Button variant="outline" size="sm" asChild className="gap-1.5 text-xs">
-              <Link href="/menu" target="_blank">
-                <ExternalLink className="size-3.5" />
-                <span>فتح صفحة المنيو للزبائن</span>
-              </Link>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {MENU_CATEGORIES.map((category) => (
-              <Card key={category.id} className="border-border/70 bg-card/60">
-                <CardHeader className="pb-3 border-b border-border/40 flex flex-row items-center justify-between">
-                  <CardTitle className="text-base text-primary font-serif font-bold">
-                    {category.name}
-                  </CardTitle>
-                  <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground">
-                    {category.items.length} أصناف
-                  </span>
-                </CardHeader>
-                <CardContent className="pt-3 space-y-3">
-                  {category.items.map((dish, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start justify-between gap-3 pb-2.5 border-b border-border/30 last:border-0 last:pb-0"
-                    >
-                      <div>
-                        <div className="text-sm font-semibold text-foreground">{dish.name}</div>
-                        <div className="text-xs text-muted-foreground line-clamp-1">{dish.description}</div>
-                      </div>
-                      <div className="font-mono text-sm font-bold text-primary shrink-0">
-                        ${dish.price}
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+        <MenuManager onShowToast={showToast} />
       )}
 
       {/* Tab 4: Analytics & Reports */}

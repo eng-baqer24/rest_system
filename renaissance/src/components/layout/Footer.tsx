@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { MapPin, Clock, Phone, Facebook, Instagram } from "lucide-react";
+import { MapPin, Clock, Phone, Facebook, Instagram, Lock } from "lucide-react";
 
 const footerLinks = [
   { href: "/", label: "Home" },
@@ -11,12 +12,16 @@ const footerLinks = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/booking", label: "Reservations" },
-  { href: "/dashboard", label: "Dashboard (لوحة التحكم)" },
 ];
 
 export function Footer() {
+  const pathname = usePathname();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+
+  if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/login")) {
+    return null;
+  }
 
   return (
     <motion.footer
@@ -38,6 +43,15 @@ export function Footer() {
               {link.label}
             </Link>
           ))}
+          {/* Discrete Admin Link */}
+          <Link
+            href="/login"
+            className="transition-colors hover:text-primary text-muted-foreground/60 flex items-center gap-1 text-xs"
+            title="تسجيل دخول مالك المطعم"
+          >
+            <Lock className="size-3" />
+            <span>بوابة الإدارة</span>
+          </Link>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border/30 pt-6">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 text-muted-foreground text-sm font-medium">
