@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { BookingModal } from "@/components/booking/BookingModal";
 
 const container = {
   hidden: { opacity: 0 },
@@ -67,14 +67,13 @@ export function HeroSection() {
             Welcome to a world of refined taste.
           </motion.p>
           <motion.div variants={item}>
-            <BookingModal>
-              <Button
-                size="lg"
-                className="mt-10 bg-primary/90 border border-primary/50 px-10 py-6 text-lg font-medium text-primary-foreground transition-all shadow-[0_0_15px_rgba(198,156,82,0.4)] hover:shadow-[0_0_25px_rgba(198,156,82,0.6)] hover:bg-primary animate-gold-glow"
-              >
-                Book a Table
-              </Button>
-            </BookingModal>
+            <Button
+              asChild
+              size="lg"
+              className="mt-10 bg-primary/90 border border-primary/50 px-10 py-6 text-lg font-medium text-primary-foreground transition-all shadow-[0_0_15px_rgba(198,156,82,0.4)] hover:shadow-[0_0_25px_rgba(198,156,82,0.6)] hover:bg-primary animate-gold-glow"
+            >
+              <Link href="/booking">Book a Table</Link>
+            </Button>
           </motion.div>
         </motion.div>
       </div>

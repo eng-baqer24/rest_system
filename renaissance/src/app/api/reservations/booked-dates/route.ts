@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { isDatabaseReady, prisma, recordDatabaseError } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { addDays, format, startOfDay } from "date-fns";
 
@@ -14,8 +14,8 @@ const MAX_RESERVATIONS_PER_DAY = 8;
  */
 export async function GET() {
   try {
-    if (!process.env.DATABASE_URL) {
-      throw new Error("No database configured");
+    if (!isDatabaseReady()) {
+      throw new Error("Database not ready or in backoff");
     }
     const today = startOfDay(new Date());
     const endDate = addDays(today, 60);
@@ -42,8 +42,10 @@ export async function GET() {
     });
 
     return NextResponse.json({ bookedDates });
-  } catch {
+  } catch (err) {
+    recordDatabaseError(err);
     // Fallback: return some demo booked dates so the UI still shows the feature
+
     const today = startOfDay(new Date());
     const demoBookedDates: string[] = [];
     for (let i = 1; i <= 30; i++) {

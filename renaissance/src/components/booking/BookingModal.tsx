@@ -207,8 +207,21 @@ export function BookingModal({ children }: BookingModalProps) {
                 disabled={!canProceedStep1}
                 onClick={() => setStep(2)}
               >
-                Next
+                Next: Enter Details
               </Button>
+              <div className="text-center pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    router.push("/booking");
+                  }}
+                  className="text-xs text-primary hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <span>أو اختر طاولتك عبر الخريطة البصرية التفاعلية</span>
+                  <span>←</span>
+                </button>
+              </div>
             </motion.div>
           )}
 

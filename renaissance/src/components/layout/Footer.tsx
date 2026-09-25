@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { MapPin, Clock, Phone, Facebook, Instagram, Lock } from "lucide-react";
+import { MapPin, Clock, Phone, Facebook, Instagram, Lock, Sparkles } from "lucide-react";
 
 const footerLinks = [
   { href: "/", label: "Home" },
@@ -22,6 +22,16 @@ export function Footer() {
   if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/login")) {
     return null;
   }
+
+  const handleReplayIntro = () => {
+    if (typeof window !== "undefined") {
+      if (window.location.pathname !== "/") {
+        window.location.href = "/?intro=true";
+      } else {
+        window.dispatchEvent(new CustomEvent("replay-restaurant-intro"));
+      }
+    }
+  };
 
   return (
     <motion.footer
@@ -43,6 +53,16 @@ export function Footer() {
               {link.label}
             </Link>
           ))}
+          {/* Replay Intro button */}
+          <button
+            type="button"
+            onClick={handleReplayIntro}
+            className="transition-colors hover:text-amber-300 text-muted-foreground/70 flex items-center gap-1.5 text-xs hover:border-amber-400/40 border border-transparent rounded-full px-2.5 py-0.5 bg-black/20"
+            title="مشاهدة انميشن الترحيب الفاخر مجدداً"
+          >
+            <Sparkles className="size-3 text-amber-400" />
+            <span>مشاهدة الترحيب مجدداً</span>
+          </button>
           {/* Discrete Admin Link */}
           <Link
             href="/login"

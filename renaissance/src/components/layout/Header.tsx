@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { BookingModal } from "@/components/booking/BookingModal";
 import { NavSidebar } from "@/components/layout/NavSidebar";
 import { cn } from "@/lib/utils";
 
@@ -19,17 +18,17 @@ export function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
-  // If on login or dashboard page, do not show public customer header
-  if (pathname?.startsWith("/login") || pathname?.startsWith("/dashboard")) {
-    return null;
-  }
-
   const headerBg = useTransform(
     scrollY,
     [0, 120],
     ["rgba(0,0,0,0)", "rgba(11,11,11,0.92)"]
   );
   const headerPadding = useTransform(scrollY, [0, 80], ["1rem", "0.75rem"]);
+
+  // If on login or dashboard page, do not show public customer header
+  if (pathname?.startsWith("/login") || pathname?.startsWith("/dashboard")) {
+    return null;
+  }
 
   return (
     <motion.header
@@ -77,19 +76,18 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <BookingModal>
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
+          <motion.div
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button
+              asChild
+              size="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow px-5 font-semibold"
             >
-              <Button
-                size="default"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 transition-shadow px-5"
-              >
-                Book a Table
-              </Button>
-            </motion.div>
-          </BookingModal>
+              <Link href="/booking">Book a Table</Link>
+            </Button>
+          </motion.div>
         </div>
       </div>
     </motion.header>

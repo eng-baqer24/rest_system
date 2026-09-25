@@ -49,6 +49,7 @@ interface Reservation {
   email: string | null;
   phone: string | null;
   notes: string | null;
+  table_number?: string | null;
   status: "pending" | "confirmed" | "cancelled" | "completed";
   createdAt: string;
   updatedAt?: string;
@@ -905,6 +906,13 @@ export default function DashboardPage() {
                                 : "ملغي / مرفوض"}
                             </span>
                           </span>
+
+                          {/* Table Number Badge */}
+                          {reservation.table_number && (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded bg-primary/20 text-[#FFE885] border border-primary/40 font-mono shadow-sm">
+                              <span>طاولة: {reservation.table_number}</span>
+                            </span>
+                          )}
 
                           <span className="text-xs text-muted-foreground mr-auto">
                             تم الطلب: {new Date(reservation.createdAt).toLocaleTimeString("ar-IQ", { hour: "2-digit", minute: "2-digit" })}

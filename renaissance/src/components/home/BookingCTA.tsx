@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { BookingModal } from "@/components/booking/BookingModal";
 
 export function BookingCTA() {
   const ref = useRef(null);
@@ -36,14 +36,13 @@ export function BookingCTA() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <BookingModal>
-            <Button
-              size="lg"
-              className="mt-8 bg-primary/95 hover:bg-primary border border-primary/50 px-12 py-6 text-lg font-medium text-primary-foreground transition-all shadow-[0_0_15px_rgba(198,156,82,0.3)] hover:shadow-[0_0_25px_rgba(198,156,82,0.5)] animate-gold-glow"
-            >
-              Reserve
-            </Button>
-          </BookingModal>
+          <Button
+            asChild
+            size="lg"
+            className="mt-8 bg-primary/95 hover:bg-primary border border-primary/50 px-12 py-6 text-lg font-medium text-primary-foreground transition-all shadow-[0_0_15px_rgba(198,156,82,0.3)] hover:shadow-[0_0_25px_rgba(198,156,82,0.5)] animate-gold-glow"
+          >
+            <Link href="/booking">Reserve</Link>
+          </Button>
         </motion.div>
       </div>
     </section>

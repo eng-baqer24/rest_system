@@ -17,6 +17,7 @@ model Reservation {
   email     String?
   phone     String?
   notes     String?  @db.Text
+  tableNumber String? @map("table_number")
   status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
